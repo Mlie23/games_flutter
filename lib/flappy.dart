@@ -5,16 +5,19 @@ import 'package:game/obstacles.dart';
 
 class Flappy extends StatefulWidget {
   @override
+  
+  var height, width;
   _FlappyState createState() => _FlappyState();
 }
 
 class _FlappyState extends State<Flappy> {
+  
   double birdWidth = 0.2;
   double birdHeight = 0.2;
   static List<double> barrierX = [2, 2, 3, 3];
   static double barrierWidth = 0.16;
   List<double> barrierHeight = [0.6, 0.4, 0.4, 0.6];
-  List<double> barrierypos = [0.7, -1, 0.7, -1];
+  List<double> barrierypos = [0.65, -1, 0.65, -1];
   List<bool> boolean = [false, true, false, true];
   double birdYaxis = 0;
   double speed = 0.2;
@@ -23,74 +26,24 @@ class _FlappyState extends State<Flappy> {
   int bestscore = 0;
   bool isPlaying = false;
   int count = 0;
-  String path = "lib/images/flappy.gif";
+  String path = "images/flappy.gif";
   double time = 0;
   double gravity = 5;
   double initialheight = 0;
 
-  void jump() {
-    setState(() {
-      time = 0;
-      initialheight = birdYaxis;
-    });
-  }
 
-  bool collision() {
-    for (int i = 0; i < barrierX.length; i++) {
-      if (0 < barrierX[i] + barrierWidth &&
-          0 + birdWidth / 2 > barrierX[i] &&
-          birdYaxis < barrierHeight[i] + barrierypos[i] &&
-          birdHeight + birdYaxis > barrierypos[i]) {
-        return true;
-      }
-    }
-    return false;
-  }
-
-  // bool checkcollision()
-  // {
-  //   if (block1.)
-  // }
-
-  void startGame() {
-    isPlaying = true;
-    Timer.periodic(Duration(milliseconds: 50), (timer) {
-      setState(() {
-        time += 0.03;
-        speed += 0.002;
-        height = -gravity * time * time + 3 * time;
-        birdYaxis = initialheight - height;
-        if (birdYaxis <= -1) {
-          birdYaxis = -1;
-        }
-        if (birdYaxis >= 0.8) {
-          birdYaxis = 0.8;
-        }
-        for (int i = 0; i <= 3; i++) {
-          barrierX[i] -= 0.03;
-          if (barrierX[i] <= -1.5) {
-            barrierX[i] = 0.9;
-          }
-        }
-      });
-      score += 1;
-      if (bestscore < score) {
-        bestscore = score;
-      }
-      if (collision()) {
-        timer.cancel();
-        isPlaying = false;
-      }
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
+    
     return GestureDetector(
       onTap: () {
         if (isPlaying) {
+          if (birdYaxis>=-0.91)
+          {
           jump();
-        } else if (collision() || birdYaxis >= 1) {
+          }
+        } else if (collision() ) {
           score = 0;
           count = 0;
           barrierX = [2, 2, 3, 3];
@@ -190,5 +143,57 @@ class _FlappyState extends State<Flappy> {
         ],
       )),
     );
+  }
+    void startGame() {
+    isPlaying = true;
+    Timer.periodic(Duration(milliseconds: 50), (timer) {
+      setState(() {
+        time += 0.03;
+        speed += 0.002;
+        height = -gravity * time * time + 3 * time;
+        birdYaxis = initialheight - height;
+        if (birdYaxis <= -1) {
+          birdYaxis = -1;
+        }
+        if (birdYaxis >= 0.8) {
+          birdYaxis=0.8;
+          // collision() = true;
+        }
+        for (int i = 0; i <= 3; i++) {
+          barrierX[i] -= 0.03;
+          if (barrierX[i] <= -1.5) {
+            barrierX[i] = 0.9;
+          }
+        }
+      });
+      score += 1;
+      if (bestscore < score) {
+        bestscore = score;
+      }
+      if (collision() ) {
+        timer.cancel();
+        isPlaying = false;
+        // startGame();
+      }
+    });
+  }
+
+    void jump() {
+    setState(() {
+      time = 0;
+      initialheight = birdYaxis;
+    });
+  }
+
+  bool collision() {
+    for (int i = 0; i < barrierX.length; i++) {
+      if (0 < barrierX[i] + barrierWidth &&
+          0 + birdWidth / 2 > barrierX[i] &&
+          birdYaxis < barrierHeight[i] + barrierypos[i] &&
+          birdHeight + birdYaxis > barrierypos[i]) {
+        return true;
+      }
+    }
+    return false;
   }
 }

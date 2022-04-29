@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class MyObstacles extends StatelessWidget
+class MyBullets extends StatelessWidget
 {
 final barrierWidth;
 final barrierHeight;
 final barrierX;
 final isThisbottom;
 
-MyObstacles({
+MyBullets({
  this.barrierWidth,
  this.barrierHeight,
  this.barrierX,
